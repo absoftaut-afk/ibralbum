@@ -3,23 +3,27 @@ const { google } = require('googleapis');
 const path = require('path');
 
 const app = express();
-const port = process.env.PORT || 3000;
 
-const KEYFILEPATH = path.join(__dirname, 'credentials.json');
+// Definição dos Escopos
 const SCOPES = ['https://www.googleapis.com/auth/drive.readonly'];
 
+// CONFIGURAÇÃO DINÂMICA: Lê da Vercel (Variável de Ambiente)
 const auth = new google.auth.GoogleAuth({
-    keyFile: KEYFILEPATH,
+    credentials: process.env.GOOGLE_CREDENTIALS 
+        ? JSON.parse(process.env.GOOGLE_CREDENTIALS) 
+        : undefined,
+    keyFile: process.env.GOOGLE_CREDENTIALS 
+        ? undefined 
+        : path.join(__dirname, '../credentials.json'), // Caminho ajustado caso teste local
     scopes: SCOPES,
 });
 
 const drive = google.drive({ version: 'v3', auth });
 
-// ID DA PASTA RAIZ (Correto conforme seu arquivo)
+// ID DA PASTA RAIZ
 const PASTA_RAIZ_ID = '1V0UxuAbra8hN7MnLkjY8ylbdP5jw_59R';
 
-app.use(express.static('./'));
-
+// Rotas da API
 app.get('/api/galerias', async (req, res) => {
     try {
         const response = await drive.files.list({
@@ -41,7 +45,7 @@ app.get('/api/galerias', async (req, res) => {
                     pageSize: 1
                 });
                 if (fotosCapa.data.files.length > 0) {
-                    // CORREÇÃO: Usando crase e ${id} corretamente
+                    // Link corrigido com ${id}
                     capaUrl = `https://lh3.googleusercontent.com/d/${fotosCapa.data.files[0].id}`;
                 }
             }
@@ -49,7 +53,6 @@ app.get('/api/galerias', async (req, res) => {
         }));
         res.json(pastas);
     } catch (err) {
-        console.error("Erro no Drive:", err);
         res.status(500).json({ erro: err.message });
     }
 });
@@ -69,7 +72,7 @@ app.get('/api/galeria/:id', async (req, res) => {
             });
             return {
                 titulo: sub.name,
-                // CORREÇÃO: Usando crase e ${id} corretamente
+                // Link corrigido com ${f.id}
                 fotos: fotos.data.files.map(f => `https://lh3.googleusercontent.com/d/${f.id}`)
             };
         }));
@@ -79,4 +82,5 @@ app.get('/api/galeria/:id', async (req, res) => {
     }
 });
 
-app.listen(port, () => console.log(`🚀 Servidor rodando em http://localhost:${port}`));
+// IMPORTANTE PARA VERCEL: Exportar o app em vez de usar app.listen
+module.exports = app;
