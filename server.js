@@ -5,17 +5,22 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const KEYFILEPATH = path.join(__dirname, 'credentials.json');
 const SCOPES = ['https://www.googleapis.com/auth/drive.readonly'];
 
+// CONFIGURAÇÃO DINÂMICA: Lê do Render ou do arquivo local
 const auth = new google.auth.GoogleAuth({
-    keyFile: KEYFILEPATH,
+    credentials: process.env.GOOGLE_CREDENTIALS 
+        ? JSON.parse(process.env.GOOGLE_CREDENTIALS) 
+        : undefined,
+    keyFile: process.env.GOOGLE_CREDENTIALS 
+        ? undefined 
+        : path.join(__dirname, 'credentials.json'),
     scopes: SCOPES,
 });
 
 const drive = google.drive({ version: 'v3', auth });
 
-// ID DA PASTA RAIZ (Correto conforme seu arquivo)
+// ID DA PASTA RAIZ
 const PASTA_RAIZ_ID = '1V0UxuAbra8hN7MnLkjY8ylbdP5jw_59R';
 
 app.use(express.static('./'));
@@ -41,7 +46,7 @@ app.get('/api/galerias', async (req, res) => {
                     pageSize: 1
                 });
                 if (fotosCapa.data.files.length > 0) {
-                    // CORREÇÃO: Usando crase e ${id} corretamente
+                    // Link ajustado para o padrão universal do Google
                     capaUrl = `https://lh3.googleusercontent.com/d/${fotosCapa.data.files[0].id}`;
                 }
             }
@@ -69,7 +74,7 @@ app.get('/api/galeria/:id', async (req, res) => {
             });
             return {
                 titulo: sub.name,
-                // CORREÇÃO: Usando crase e ${id} corretamente
+                // Link ajustado para o padrão universal do Google
                 fotos: fotos.data.files.map(f => `https://lh3.googleusercontent.com/d/${f.id}`)
             };
         }));
@@ -79,4 +84,4 @@ app.get('/api/galeria/:id', async (req, res) => {
     }
 });
 
-app.listen(port, () => console.log(`🚀 Servidor rodando em http://localhost:${port}`));
+app.listen(port, () => console.log(`🚀 Servidor rodando na porta ${port}`));
