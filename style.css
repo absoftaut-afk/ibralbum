@@ -1,0 +1,179 @@
+/* RESET BÁSICO */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+    background: white;
+}
+
+.logo {
+    font-size: 18px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    font-weight: 300;
+}
+
+/* CONTAINER PRINCIPAL */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* FEED DE CAPAS (PÁGINA INICIAL) */
+.grid-passgallery {
+    display: grid;
+    grid-template-columns: 1fr; /* 1 coluna no celular */
+    gap: 30px;
+}
+
+@media (min-width: 768px) {
+    .grid-passgallery {
+        grid-template-columns: repeat(3, 1fr); /* 3 colunas no PC */
+    }
+}
+
+.galeria-card {
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+}
+
+.capa-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.capa-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.galeria-card:hover img {
+    transform: scale(1.05);
+}
+
+.galeria-titulo h3 {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: #666;
+}
+
+/* MENU INTERNO (STICKY) */
+.galeria-interna-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.98);
+    padding: 20px;
+    z-index: 1000;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    overflow-x: auto;
+    margin-bottom: 40px;
+}
+
+.galeria-interna-nav a {
+    text-decoration: none;
+    color: #999;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+/* LAYOUT MOSAICO (INTERNO) */
+.secao-fotos {
+    margin-bottom: 80px;
+}
+
+.secao-titulo {
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    font-weight: 300;
+    margin-bottom: 40px;
+    color: #aaa;
+}
+
+.lista-fotos-mosaico {
+    column-count: 2; /* 2 colunas no celular */
+    column-gap: 15px;
+}
+
+.lista-fotos-mosaico img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 15px;
+    break-inside: avoid;
+    border-radius: 2px;
+}
+
+@media (min-width: 768px) {
+    .lista-fotos-mosaico {
+        column-count: 3; /* 3 colunas no PC */
+    }
+}
+/* --- LIGHTBOX (VISUALIZAÇÃO EM TELA CHEIA) --- */
+#lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: none; /* Escondido por padrão */
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    user-select: none;
+}
+
+#lightbox-img {
+    max-width: 95%;
+    max-height: 90%;
+    object-fit: contain;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+/* Botões do Lightbox */
+.lightbox-btn {
+    position: absolute;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 20px;
+    transition: opacity 0.3s;
+}
+
+.lightbox-btn:hover { opacity: 0.6; }
+
+#close-btn { top: 20px; right: 20px; font-size: 40px; }
+#prev-btn { left: 10px; }
+#next-btn { right: 10px; }
+
+/* Esconde botões no celular para não atrapalhar a visão, ou diminui */
+@media (max-width: 768px) {
+    .lightbox-btn { font-size: 24px; padding: 10px; }
+}
