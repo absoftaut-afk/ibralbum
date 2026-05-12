@@ -46,7 +46,7 @@ app.get('/api/galerias', async (req, res) => {
                 });
                 if (fotosCapa.data.files.length > 0) {
                     // Link corrigido com ${id}
-                    capaUrl = `https://lh3.googleusercontent.com/d/${fotosCapa.data.files[0].id}`;
+                    capaUrl = `https://lh3.googleusercontent.com/d/$${fotosCapa.data.files[0].id}`;
                 }
             }
             return { id: folder.id, nome: folder.name, capaUrl: capaUrl };
@@ -73,7 +73,7 @@ app.get('/api/galeria/:id', async (req, res) => {
             return {
                 titulo: sub.name,
                 // Link corrigido com ${f.id}
-                fotos: fotos.data.files.map(f => `https://lh3.googleusercontent.com/d/${f.id}`)
+                fotos: fotos.data.files.map(f => `https://lh3.googleusercontent.com/d/$${f.id}`)
             };
         }));
         res.json({ secoes });
