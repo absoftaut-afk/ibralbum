@@ -73,7 +73,7 @@ app.get('/api/galeria/:id', async (req, res) => {
             return {
                 titulo: sub.name,
                 // CORREÇÃO: Inserido o caractere '$' e alterado para a URL de visualização direta oficial
-                fotos: fotos.data.files.map(f => `https://lh3.googleusercontent.com/d/${f.id}`)
+                fotos: fotos.data.files.map(f => `https://lh3.googleusercontent.com/d/$${f.id}`)
             };
         }));
         res.json({ secoes });
