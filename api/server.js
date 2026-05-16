@@ -14,7 +14,7 @@ const auth = new google.auth.GoogleAuth({
         : undefined,
     keyFile: process.env.GOOGLE_CREDENTIALS 
         ? undefined 
-        : path.join(__dirname, '../credentials.json'), // Caminho ajustado caso teste local
+        : path.join(__dirname, '../credentials.json'), // Ajustado para teste local
     scopes: SCOPES,
 });
 
@@ -45,8 +45,8 @@ app.get('/api/galerias', async (req, res) => {
                     pageSize: 1
                 });
                 if (fotosCapa.data.files.length > 0) {
-                    // Link corrigido com ${id}
-                    capaUrl = `https://lh3.googleusercontent.com/d/$${fotosCapa.data.files[0].id}`;
+                    // CORREÇÃO: Inserido o caractere '$' para concatenar o ID da capa corretamente
+                    capaUrl = `https://lh3.googleusercontent.com/d/${fotosCapa.data.files[0].id}`;
                 }
             }
             return { id: folder.id, nome: folder.name, capaUrl: capaUrl };
@@ -72,8 +72,8 @@ app.get('/api/galeria/:id', async (req, res) => {
             });
             return {
                 titulo: sub.name,
-                // Link corrigido com ${f.id}
-                fotos: fotos.data.files.map(f => `https://lh3.googleusercontent.com/d/$${f.id}`)
+                // CORREÇÃO: Inserido o caractere '$' e alterado para a URL de visualização direta oficial
+                fotos: fotos.data.files.map(f => `https://lh3.googleusercontent.com/d/${f.id}`)
             };
         }));
         res.json({ secoes });
@@ -82,5 +82,5 @@ app.get('/api/galeria/:id', async (req, res) => {
     }
 });
 
-// IMPORTANTE PARA VERCEL: Exportar o app em vez de usar app.listen
+// Exporta o app para o ambiente Serverless da Vercel
 module.exports = app;
