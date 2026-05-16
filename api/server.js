@@ -46,7 +46,7 @@ app.get('/api/galerias', async (req, res) => {
                 });
                 if (fotosCapa.data.files.length > 0) {
                     // CORREÇÃO: Inserido o caractere '$' para concatenar o ID da capa corretamente
-                    capaUrl = `https://lh3.googleusercontent.com/d/${fotosCapa.data.files[0].id}`;
+                    capaUrl = `https://lh3.googleusercontent.com/d/$${fotosCapa.data.files[0].id}`;
                 }
             }
             return { id: folder.id, nome: folder.name, capaUrl: capaUrl };
