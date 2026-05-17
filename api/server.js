@@ -257,7 +257,9 @@ app.get('/g/:slug', async (req, res) => {
 
 <meta name="twitter:card" content="summary_large_image">
 
-<meta http-equiv="refresh" content="0; url=/">
+<script>
+window.location.href = "/?galeria=${req.params.slug}";
+</script>
 
 </head>
 
