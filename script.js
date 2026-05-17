@@ -112,6 +112,43 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === "ArrowRight") mudarFoto(1);
             if (e.key === "Escape") fecharLightbox();
         }
+
+        // ==========================================
+// ABRIR GALERIA VIA URL
+// ==========================================
+
+const params = new URLSearchParams(window.location.search);
+
+const galeriaSlug = params.get('galeria');
+
+if (galeriaSlug) {
+
+    fetch('/api/galerias')
+        .then(res => res.json())
+        .then(galerias => {
+
+            const galeria = galerias.find(g => {
+
+                const slug = g.nome
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+
+                return slug === galeriaSlug;
+
+            });
+
+            if (galeria) {
+
+                abrirGaleria(galeria.id, galeria.nome);
+
+            }
+
+        });
+
+}
     });
 
     const lb = document.getElementById('lightbox');
