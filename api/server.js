@@ -57,7 +57,7 @@ function criarSlug(texto) {
 }
 
 // ===============================
-// ROTA PRINCIPAL
+// HOME
 // ===============================
 
 app.get('/', (req, res) => {
@@ -65,7 +65,7 @@ app.get('/', (req, res) => {
 });
 
 // ===============================
-// API - GALERIAS
+// API GALERIAS
 // ===============================
 
 app.get('/api/galerias', async (req, res) => {
@@ -81,7 +81,6 @@ app.get('/api/galerias', async (req, res) => {
 
             response.data.files.map(async (folder) => {
 
-                // PROCURA PASTA CAPA
                 const capaFolder = await drive.files.list({
                     q: `'${folder.id}' in parents and name = 'Capa' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
                     fields: 'files(id)',
@@ -130,7 +129,7 @@ app.get('/api/galerias', async (req, res) => {
 });
 
 // ===============================
-// API - GALERIA INTERNA
+// API GALERIA
 // ===============================
 
 app.get('/api/galeria/:id', async (req, res) => {
@@ -180,7 +179,7 @@ app.get('/api/galeria/:id', async (req, res) => {
 });
 
 // ===============================
-// OPEN GRAPH WHATSAPP
+// OPEN GRAPH / WHATSAPP
 // ===============================
 
 app.get('/g/:slug', async (req, res) => {
@@ -212,7 +211,10 @@ app.get('/g/:slug', async (req, res) => {
 
         }
 
-        // PROCURA CAPA
+        // ===============================
+        // PROCURA IMAGEM DE CAPA
+        // ===============================
+
         const capaFolder = await drive.files.list({
             q: `'${galeria.id}' in parents and name = 'Capa' and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
             fields: 'files(id)',
@@ -239,6 +241,10 @@ app.get('/g/:slug', async (req, res) => {
 
         const url = `${SITE_URL}/g/${req.params.slug}`;
 
+        // ===============================
+        // HTML OPEN GRAPH
+        // ===============================
+
         res.send(`
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -257,8 +263,13 @@ app.get('/g/:slug', async (req, res) => {
 
 <meta name="twitter:card" content="summary_large_image">
 
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
 <script>
-window.location.href = "/?galeria=${req.params.slug}";
+setTimeout(() => {
+    window.location.href = "/?galeria=${req.params.slug}";
+}, 300);
 </script>
 
 </head>
@@ -289,7 +300,7 @@ app.get('*', (req, res) => {
 });
 
 // ===============================
-// EXPORT VERCEL
+// EXPORT
 // ===============================
 
 module.exports = app;
