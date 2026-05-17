@@ -25,6 +25,16 @@ async function iniciarSite() {
 }
 
 async function abrirGaleria(id, nome) {
+
+    const slug = nome
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+window.history.pushState({}, '', `/g/${slug}`);
+    
     const mainArea = document.getElementById('conteudo-dinamico');
     mainArea.innerHTML = `<div style="text-align:center; padding:100px; letter-spacing:3px;">CARREGANDO ${nome}...</div>`;
     window.scrollTo(0, 0);
