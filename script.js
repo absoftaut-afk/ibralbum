@@ -110,19 +110,14 @@ window.abrirGaleria = async function(id, nome) {
             <nav class="galeria-interna-nav">
 
                 <a href="/" style="color:black; font-weight:bold;">
-                    &larr; VOLTAR
+                    ← VOLTAR
                 </a>
         `;
 
-        // ==========================================
-        // ALTERAÇÃO AQUI: Inverte a ordem das seções (subpastas)
-        // ==========================================
-        const secoesInvertidas = dados.secoes ? [...dados.secoes].reverse() : [];
+        // MENU SEÇÕES
+        if (dados.secoes && dados.secoes.length > 0) {
 
-        // MENU SEÇÕES (Agora renderizando na ordem invertida)
-        if (secoesInvertidas.length > 0) {
-
-            secoesInvertidas.forEach((s, i) => {
+            dados.secoes.forEach((s, i) => {
 
                 html += `
                     <a href="#s-${i}">
@@ -134,15 +129,12 @@ window.abrirGaleria = async function(id, nome) {
 
             html += `</nav>`;
 
-            // SEÇÕES (As subpastas mais recentes aparecem no topo)
-            secoesInvertidas.forEach((secao, i) => {
+            // SEÇÕES
+            dados.secoes.forEach((secao, i) => {
 
                 const startIndex = fotosDaGaleria.length;
 
-                // Mantém as fotos de cada subpasta na ordem correta, mas empilha a subpasta no topo
-                if (secao.fotos) {
-                    fotosDaGaleria.push(...secao.fotos);
-                }
+                fotosDaGaleria.push(...secao.fotos);
 
                 html += `
                     <section id="s-${i}" class="secao-fotos">
@@ -153,7 +145,7 @@ window.abrirGaleria = async function(id, nome) {
 
                         <div class="lista-fotos-mosaico">
 
-                            ${secao.fotos ? secao.fotos.map((url, imgIdx) => `
+                            ${secao.fotos.map((url, imgIdx) => `
 
                                 <img
                                     src="${url}"
@@ -161,7 +153,7 @@ window.abrirGaleria = async function(id, nome) {
                                     onclick="abrirLightbox(${startIndex + imgIdx})"
                                 >
 
-                            `).join('') : ''}
+                            `).join('')}
 
                         </div>
 
