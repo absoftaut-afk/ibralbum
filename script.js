@@ -110,7 +110,7 @@ window.abrirGaleria = async function(id, nome) {
             <nav class="galeria-interna-nav">
 
                 <a href="/" style="color:black; font-weight:bold;">
-                    ← VOLTAR
+                    &larr; VOLTAR
                 </a>
         `;
 
@@ -132,9 +132,12 @@ window.abrirGaleria = async function(id, nome) {
             // SEÇÕES
             dados.secoes.forEach((secao, i) => {
 
+                // MODIFICAÇÃO AQUI: Inverte o array de fotos da seção para as mais recentes virem primeiro
+                const fotosInvertidas = secao.fotos ? [...secao.fotos].reverse() : [];
+
                 const startIndex = fotosDaGaleria.length;
 
-                fotosDaGaleria.push(...secao.fotos);
+                fotosDaGaleria.push(...fotosInvertidas);
 
                 html += `
                     <section id="s-${i}" class="secao-fotos">
@@ -145,7 +148,7 @@ window.abrirGaleria = async function(id, nome) {
 
                         <div class="lista-fotos-mosaico">
 
-                            ${secao.fotos.map((url, imgIdx) => `
+                            ${fotosInvertidas.map((url, imgIdx) => `
 
                                 <img
                                     src="${url}"
