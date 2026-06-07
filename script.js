@@ -81,7 +81,7 @@ window.abrirGaleria = async function(id, nome) {
     window.history.pushState(
         {},
         '',
-        `/?galeria=${slug}`
+       `/g/${slug}`
     );
 
     const mainArea = document.getElementById('conteudo-dinamico');
