@@ -140,9 +140,10 @@ app.get('/api/galeria/:id', async (req, res) => {
         const folderId = req.params.id;
 
         const subpastas = await drive.files.list({
-            q: `'${folderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and name != 'Capa' and trashed = false`,
-            fields: 'files(id, name)',
-        });
+    q: `'${folderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and name != 'Capa' and trashed = false`,
+    fields: 'files(id, name, createdTime)',
+    orderBy: 'createdTime desc'
+});
 
         const secoes = await Promise.all(
 
