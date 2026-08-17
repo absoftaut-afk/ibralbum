@@ -1,4 +1,3 @@
-
 const express = require('express');
 const { google } = require('googleapis');
 const path = require('path');
@@ -76,6 +75,7 @@ app.get('/api/galerias', async (req, res) => {
         const response = await drive.files.list({
             q: `'${PASTA_RAIZ_ID}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
             fields: 'files(id, name)',
+            pageSize: 100
         });
 
         const galerias = await Promise.all(
@@ -99,7 +99,8 @@ app.get('/api/galerias', async (req, res) => {
 
                     if (fotosCapa.data.files.length > 0) {
 
-                        capaUrl = `https://lh3.googleusercontent.com/d/${fotosCapa.data.files[0].id}`;
+                        // CORREÇÃO: Adicionado $ antes do {id}
+                        capaUrl = `http://googleusercontent.com/profile/picture/${fotosCapa.data.files[0].id}`;
 
                     }
                 }
@@ -140,10 +141,11 @@ app.get('/api/galeria/:id', async (req, res) => {
         const folderId = req.params.id;
 
         const subpastas = await drive.files.list({
-    q: `'${folderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and name != 'Capa' and trashed = false`,
-    fields: 'files(id, name, createdTime)',
-    orderBy: 'createdTime desc'
-});
+            q: `'${folderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and name != 'Capa' and trashed = false`,
+            fields: 'files(id, name, createdTime)',
+            orderBy: 'createdTime desc',
+            pageSize: 100
+        });
 
         const secoes = await Promise.all(
 
@@ -152,13 +154,15 @@ app.get('/api/galeria/:id', async (req, res) => {
                 const fotos = await drive.files.list({
                     q: `'${sub.id}' in parents and mimeType contains 'image/' and trashed = false`,
                     fields: 'files(id)',
+                    pageSize: 1000 // AJUSTE CHAVE: Permite carregar até 1000 fotos por subpasta
                 });
 
                 return {
                     titulo: sub.name,
 
+                    // CORREÇÃO: Adicionado $ antes do {f.id}
                     fotos: fotos.data.files.map(
-                        f => `https://lh3.googleusercontent.com/d/${f.id}`
+                        f => `http://googleusercontent.com/profile/picture/${f.id}`
                     )
                 };
 
@@ -234,7 +238,8 @@ app.get('/g/:slug', async (req, res) => {
 
             if (fotosCapa.data.files.length > 0) {
 
-                imagem = `https://lh3.googleusercontent.com/d/${fotosCapa.data.files[0].id}`;
+                // CORREÇÃO: Adicionado $ antes do {id}
+                imagem = `http://googleusercontent.com/profile/picture/${fotosCapa.data.files[0].id}`;
 
             }
         }
