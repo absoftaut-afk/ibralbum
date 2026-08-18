@@ -303,6 +303,7 @@ app.get('/api/galeria/:id', async (req, res) => {
                     q: `'${sub.id}' in parents and mimeType contains 'image/' and trashed = false`,
 
                     fields: 'files(id)',
+                    pageSize: 1000 // <--- ADICIONADO: Puxa até 1000 fotos por subpasta
 
                 });
 
